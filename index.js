@@ -6,6 +6,8 @@ const characterDelete = document.querySelector("[data-delete]");
 const outputPreviousOperand = document.querySelector("[data-previous-operand]");
 const outputCurrentOperand = document.querySelector("[data-current-operand]");
 
+let operationClicked = "";
+
 const updateDisplay = () => {
   buttons.forEach((btn) => {
     btn.addEventListener("click", (evt) => {
@@ -22,6 +24,7 @@ const clearAll = () => {
   allClear.addEventListener("click", () => {
     outputCurrentOperand.innerHTML = "";
     outputPreviousOperand.innerHTML = "";
+    operationClicked = "";
   });
 };
 clearAll();
@@ -37,11 +40,11 @@ deleteChar();
 const chooseOperation = () => {
   operation.forEach((opera) => {
     opera.addEventListener("click", (evt) => {
-      operationClicked = evt.target.innerHTML;
       if (outputCurrentOperand.innerHTML === "") return;
       if (outputPreviousOperand !== "") {
         compute();
       }
+      operationClicked = evt.target.innerHTML;
       outputPreviousOperand.innerHTML +=
         outputCurrentOperand.innerHTML + operationClicked;
       outputCurrentOperand.innerHTML = "";
@@ -54,7 +57,7 @@ const compute = () => {
   let computation;
   var prev = parseFloat(outputPreviousOperand.innerHTML);
   var current = parseFloat(outputCurrentOperand.innerHTML);
-  if (isNaN(prev) || isNaN(current)) return;
+  if (isNaN(prev) || isNaN(current) || !operationClicked) return;
   switch (operationClicked) {
     case "+":
       computation = prev + current;
@@ -74,6 +77,7 @@ const compute = () => {
   }
   outputCurrentOperand.innerHTML = computation;
   outputPreviousOperand.innerHTML = "";
+  operationClicked = "";
 };
 
 equals.addEventListener("click", () => {
